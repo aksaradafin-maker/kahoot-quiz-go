@@ -6,7 +6,8 @@ export const ws = writable<WebSocket | null>(null);
 export function connect(token: string) {
     if (get(ws)) return; // Already connected
 
-    const socket = new WebSocket(`ws://localhost:8080/api/v1/ws?token=${token}`);
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const socket = new WebSocket(`${protocol}//${window.location.host}/api/v1/ws?token=${encodeURIComponent(token)}`);
 
     socket.onopen = () => {
         console.log('Connected to WS');
